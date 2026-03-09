@@ -1,0 +1,134 @@
+data:
+  dataset_dir: ../LENS/ml-25m
+  min_rating: 3.5
+  max_rows: 800000
+  val_k: 1
+  test_k: 1
+  min_user_interactions: 5
+
+baseline:
+  enabled: true
+
+retrieval:
+  algorithm: als
+  factors: 96
+  regularization: 0.03
+  iterations: 8
+  alpha: 35
+  recommend_batch_size: 4096
+  log_every_batches: 10
+  seed: 42
+  use_gpu: true
+  require_gpu: true
+
+ranker:
+  framework: xgboost
+  features_use_gpu: true
+  chunk_users: 6000
+  n_estimators: 180
+  learning_rate: 0.05
+  max_depth: 6
+  subsample: 0.9
+  colsample_bytree: 0.9
+  tree_method: hist
+  device: cuda
+  n_jobs: 2
+  max_bin: 256
+  seed: 42
+
+final_model:
+  enabled: true
+  candidate_fusion:
+    enabled: true
+    use_gpu: true
+    chunk_users: 6000
+    two_tower_weight: 0.35
+    als_weight: 0.30
+    aux_retrievals:
+      - name: aux_cosine
+        enabled: true
+        algorithm: cosine
+        weight: 0.10
+        itemknn_k: 160
+        itemknn_num_threads: 0
+        require_gpu: false
+      - name: aux_lightgcn
+        enabled: true
+        algorithm: lightgcn
+        weight: 0.25
+        embedding_dim: 64
+        num_layers: 2
+        lr: 0.001
+        epochs: 3
+        batch_size: 4096
+        num_negatives: 8
+        weight_decay: 0.000001
+        grad_clip: 2.0
+        neg_sampling_pop_power: 0.75
+        pop_blend_weight: 0.08
+        query_batch_size: 1024
+        candidate_multiplier: 2
+        train_log_every_batches: 40
+        query_log_every_batches: 10
+        use_gpu: true
+        require_gpu: true
+        seed: 42
+  two_tower:
+    embedding_dim: 64
+    lr: 0.001
+    batch_size: 4096
+    epochs: 4
+    num_negatives: 12
+    weight_decay: 0.000001
+    grad_clip: 2.0
+    neg_sampling_pop_power: 0.75
+    pop_blend_weight: 0.12
+    query_batch_size: 1024
+    candidate_multiplier: 2
+    train_log_every_batches: 40
+    query_log_every_batches: 10
+    use_gpu: true
+    require_gpu: true
+    seed: 42
+  ranker:
+    framework: xgboost
+    features_use_gpu: true
+    chunk_users: 6000
+    n_estimators: 220
+    learning_rate: 0.04
+    max_depth: 6
+    subsample: 0.9
+    colsample_bytree: 0.9
+    tree_method: hist
+    device: cuda
+    n_jobs: 2
+    max_bin: 256
+    seed: 42
+  ranker_ensemble:
+    enabled: true
+    baseline_weight: 0.20
+    final_weight: 0.80
+
+evaluation:
+  k_candidates: 120
+  ks: [10, 20, 50]
+
+benchmark:
+  n_negatives: 100
+  max_users: 3000
+  seed: 42
+  ks: [10, 20]
+  itemknn_models: []
+  output_path: outputs/gpu_v2_lightgcn_smoke/tables/benchmark_sampled_metrics_gpu_v2_smoke.csv
+
+outputs:
+  tables_dir: outputs/gpu_v2_lightgcn_smoke/tables
+  figures_dir: outputs/gpu_v2_lightgcn_smoke/figures
+  save_parquet_tables: true
+  parquet_tables_dir: outputs/gpu_v2_lightgcn_smoke/parquet
+  save_ranker_scores: false
+
+logging:
+  resource_snapshot: true
+  progress_resources: true
+  gpu_index: 0

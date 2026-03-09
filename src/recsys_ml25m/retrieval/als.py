@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
+from .lightgcn import generate_candidates_lightgcn, train_lightgcn
+
 
 @dataclass
 class PopularityModel:
@@ -52,7 +54,20 @@ def build_retrieval_model(train_df: pd.DataFrame, cfg: dict, log_fn: Callable[[s
             f"items={len(idx_to_item):,} interactions={len(train_df):,}"
         )
 
-    if algo in {"als", "bpr"}:
+    if algo == "lightgcn":
+        try:
+            model = train_lightgcn(train_df, cfg, log_fn=log_fn)
+            if log_fn:
+                log_fn("baseline.retrieval.fit algo=lightgcn")
+        except Exception:
+            if require_gpu:
+                raise
+            algo = "popular"
+            item_pop = train_df.groupby("movieId").size().sort_values(ascending=False).index.to_numpy(dtype=np.int32)
+            model = PopularityModel(ranked_items=item_pop)
+            if log_fn:
+                log_fn("baseline.retrieval.fallback algo=popular")
+    elif algo in {"als", "bpr"}:
         try:
             if algo == "als":
                 from implicit.als import AlternatingLeastSquares
@@ -192,6 +207,14 @@ def generate_candidates(
         valid_users.append(int(user_id))
         valid_uidx.append(int(uidx))
 
+    if artifacts.algorithm == "lightgcn":
+        return generate_candidates_lightgcn(
+            artifacts.model,
+            user_ids=user_ids,
+            k=k,
+            filter_seen=filter_seen,
+            log_fn=log_fn,
+        )
     if artifacts.algorithm in {"als", "bpr", "bm25", "cosine", "tfidf"}:
         bs = max(1, int(artifacts.recommend_batch_size))
         n_batches = max(1, (len(valid_users) + bs - 1) // bs)

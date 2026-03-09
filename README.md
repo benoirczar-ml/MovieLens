@@ -82,6 +82,25 @@ Domyślny profil produkcyjny jest ustawiony na `strict` jakościowo (hybrid4 + t
 python scripts/run_production.py
 ```
 
+## GPU v2 Track (LightGCN, Dual Protocol)
+
+Nowy tor `gpu_v2` uruchamia jednym poleceniem:
+- full-catalog pipeline (`run_pipeline`)
+- benchmark sampled-negatives (`benchmark_sampled_eval`)
+- zapis tabel w `CSV + Parquet`
+
+```bash
+python scripts/run_gpu_v2.py --config configs/gpu_v2_lightgcn.yaml
+```
+
+Smoke:
+```bash
+python scripts/run_gpu_v2.py --config configs/gpu_v2_lightgcn_smoke.yaml
+```
+
+Szczegóły protokołów i targetów:
+- `docs/GPU_V2_PROTOCOLS.md`
+
 ## Speed Milestone (Full Data)
 
 Dostępne są dwa profile szybkościowe:
@@ -257,6 +276,8 @@ python scripts/sweep_fusion_weights.py --config configs/final.yaml --two-tower-w
 python scripts/sweep_fusion_weights.py --config configs/final_gpu_hybrid3_cosine.yaml --two-tower-weights 0.40,0.45 --aux-weights 0.05,0.10 --aux-algorithm cosine --target-k 20 --metric ndcg
 python scripts/sweep_ensemble_weights.py --config configs/final.yaml --baseline-weights 0.45,0.55,0.65 --target-k 20 --metric ndcg
 python scripts/sweep_ensemble_weights.py --config configs/final_gpu_hybrid3_cosine.yaml --baseline-weights 0.45,0.55,0.65,0.75 --target-k 20 --metric ndcg
+python scripts/run_gpu_v2.py --config configs/gpu_v2_lightgcn.yaml
+python scripts/run_gpu_v2.py --config configs/gpu_v2_lightgcn_smoke.yaml
 ```
 
 ## Main Checkpoint

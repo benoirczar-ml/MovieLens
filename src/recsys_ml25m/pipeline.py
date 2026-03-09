@@ -342,12 +342,30 @@ def run_pipeline(cfg: dict) -> dict[str, pd.DataFrame]:
     out_tables = Path(out_cfg.get("tables_dir", "outputs/tables"))
     out_figures = Path(out_cfg.get("figures_dir", "outputs/figures"))
     ensure_dirs(out_tables, out_figures)
+    save_parquet_tables = bool(out_cfg.get("save_parquet_tables", False))
+    parquet_tables_dir = Path(out_cfg.get("parquet_tables_dir", out_tables.parent / "parquet"))
+    if save_parquet_tables:
+        ensure_dirs(parquet_tables_dir)
     save_ranker_scores = bool(out_cfg.get("save_ranker_scores", False))
     ranker_scores_dir = Path(out_cfg.get("ranker_scores_dir", out_tables / "ranker_scores"))
     if save_ranker_scores:
         ensure_dirs(ranker_scores_dir)
         log(f"Outputs: ranker_scores={ranker_scores_dir}")
     log(f"Outputs: tables={out_tables} figures={out_figures}")
+    if save_parquet_tables:
+        log(f"Outputs: parquet_tables={parquet_tables_dir}")
+
+    def _save_table(df: pd.DataFrame, name: str) -> None:
+        csv_path = out_tables / f"{name}.csv"
+        df.to_csv(csv_path, index=False)
+        log(f"Saved: {csv_path}")
+        if save_parquet_tables:
+            pq_path = parquet_tables_dir / f"{name}.parquet"
+            try:
+                df.to_parquet(pq_path, index=False)
+                log(f"Saved: {pq_path}")
+            except Exception as e:
+                log(f"Parquet save fallback for {name}: {type(e).__name__}: {e}")
 
     def _save_rank_scores(df: pd.DataFrame, name: str) -> None:
         if not save_ranker_scores:
@@ -532,8 +550,7 @@ def run_pipeline(cfg: dict) -> dict[str, pd.DataFrame]:
         log(f"Stage baseline.ranker.eval done in {time.perf_counter() - t0:.1f}s")
 
         baseline_metrics = pd.concat([metrics_retrieval_bas, metrics_ranker_bas], ignore_index=True)
-        baseline_metrics.to_csv(out_tables / "metrics_baseline.csv", index=False)
-        log(f"Saved: {out_tables / 'metrics_baseline.csv'}")
+        _save_table(baseline_metrics, "metrics_baseline")
         all_metrics.append(baseline_metrics)
     else:
         log("Baseline stages are disabled (baseline.enabled=false)")
@@ -819,8 +836,7 @@ def run_pipeline(cfg: dict) -> dict[str, pd.DataFrame]:
             gc.collect()
 
         final_metrics = pd.concat(metrics_parts, ignore_index=True)
-        final_metrics.to_csv(out_tables / "metrics_final.csv", index=False)
-        log(f"Saved: {out_tables / 'metrics_final.csv'}")
+        _save_table(final_metrics, "metrics_final")
         all_metrics.append(final_metrics)
 
         del scored_final
@@ -834,8 +850,7 @@ def run_pipeline(cfg: dict) -> dict[str, pd.DataFrame]:
         raise RuntimeError("No metrics produced. Enable baseline and/or final_model.")
 
     comparison = pd.concat(all_metrics, ignore_index=True)
-    comparison.to_csv(out_tables / "metrics_comparison.csv", index=False)
-    log(f"Saved: {out_tables / 'metrics_comparison.csv'}")
+    _save_table(comparison, "metrics_comparison")
 
     t0 = time.perf_counter()
     _save_plots(comparison, out_figures)
@@ -852,8 +867,7 @@ def run_pipeline(cfg: dict) -> dict[str, pd.DataFrame]:
             }
         ]
     )
-    split_stats.to_csv(out_tables / "split_stats.csv", index=False)
-    log(f"Saved: {out_tables / 'split_stats.csv'}")
+    _save_table(split_stats, "split_stats")
     log(f"Pipeline done in {time.perf_counter() - t_all:.1f}s", with_resources=stage_resources)
 
     return {

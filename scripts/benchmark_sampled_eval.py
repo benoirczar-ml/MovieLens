@@ -12,7 +12,7 @@ from _bootstrap import ROOT
 from recsys_ml25m.config import load_config
 from recsys_ml25m.data.io import load_ratings, temporal_leave_last_split
 from recsys_ml25m.eval.metrics import hitrate_at_k, ndcg_at_k, recall_at_k
-from recsys_ml25m.retrieval.als import build_retrieval_model
+from recsys_ml25m.retrieval.als import build_retrieval_model, generate_candidates
 from recsys_ml25m.retrieval.two_tower import train_two_tower_faiss
 
 
@@ -74,6 +74,28 @@ def _sample_eval_candidates(
 
 
 def _score_als(artifacts, eval_candidates: dict[int, np.ndarray]) -> dict[int, np.ndarray]:
+    if getattr(artifacts, "algorithm", "") == "lightgcn":
+        pred_scores: dict[int, np.ndarray] = {}
+        lg = artifacts.model
+        u_map = lg.user_to_idx
+        i_map = lg.item_to_idx
+        item_pop = lg.item_popularity
+        blend = float(lg.pop_blend_weight)
+        for uid, items in eval_candidates.items():
+            uidx = u_map.get(int(uid))
+            scores = np.full(len(items), -1e9, dtype=np.float32)
+            if uidx is not None:
+                mapped = np.asarray([i_map.get(int(mid), -1) for mid in items], dtype=np.int64)
+                valid = mapped >= 0
+                if np.any(valid):
+                    uemb = lg.user_emb[int(uidx)]
+                    iemb = lg.item_emb[mapped[valid]]
+                    base = (iemb @ uemb).astype(np.float32)
+                    pop = item_pop[mapped[valid]].astype(np.float32)
+                    scores[valid] = (1.0 - blend) * base + blend * pop
+            pred_scores[int(uid)] = scores
+        return pred_scores
+
     pred_scores: dict[int, np.ndarray] = {}
     model = artifacts.model
     user_to_idx = artifacts.user_to_idx
@@ -194,6 +216,30 @@ def _to_prediction_lists(scores_by_user: dict[int, np.ndarray], eval_candidates:
     return pred
 
 
+def _score_from_retrieval_candidates(
+    artifacts,
+    eval_candidates: dict[int, np.ndarray],
+    k_retrieval: int,
+    model_name: str,
+) -> dict[int, np.ndarray]:
+    users = list(eval_candidates.keys())
+    cand = generate_candidates(artifacts, user_ids=users, k=int(k_retrieval), filter_seen=True, log_fn=_log)
+    if cand.empty:
+        return {uid: np.full(len(items), -1e9, dtype=np.float32) for uid, items in eval_candidates.items()}
+
+    cand_map: dict[int, dict[int, float]] = {}
+    for uid, g in cand.groupby("userId", sort=False):
+        cand_map[int(uid)] = {int(mid): float(sc) for mid, sc in zip(g["movieId"].tolist(), g["retrieval_score"].tolist())}
+
+    pred_scores: dict[int, np.ndarray] = {}
+    for uid, items in eval_candidates.items():
+        src = cand_map.get(int(uid), {})
+        arr = np.asarray([float(src.get(int(mid), -1e9)) for mid in items], dtype=np.float32)
+        pred_scores[int(uid)] = arr
+    _log(f"Score sampled candidate sets: {model_name} via generated topK={int(k_retrieval)}")
+    return pred_scores
+
+
 def _eval_rows(model_name: str, gt: dict[int, set[int]], pred: dict[int, list[int]], ks: list[int]) -> list[dict]:
     rows = []
     for k in ks:
@@ -217,6 +263,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max-users", type=int, default=None)
     p.add_argument("--seed", type=int, default=None)
     p.add_argument("--output", default=None)
+    p.add_argument("--save-parquet", action="store_true")
     return p.parse_args()
 
 
@@ -286,28 +333,108 @@ def main() -> None:
     fusion_cfg = final_cfg.get("candidate_fusion", {})
     w_tt = float(fusion_cfg.get("two_tower_weight", 0.45))
     w_als = float(fusion_cfg.get("als_weight", 0.55))
+    retrieval_eval_k = int(bench_cfg.get("retrieval_eval_k", max(400, n_negatives + 1)))
+
+    source_scores: dict[str, dict[int, np.ndarray]] = {
+        "als": als_scores,
+        "tt": tt_scores,
+    }
+    source_weights: dict[str, float] = {
+        "als": w_als,
+        "tt": w_tt,
+    }
+
+    aux_cfg_list = fusion_cfg.get("aux_retrievals")
+    if isinstance(aux_cfg_list, list):
+        raw_aux_cfgs = [x for x in aux_cfg_list if isinstance(x, dict)]
+    else:
+        single_aux = fusion_cfg.get("aux_retrieval", {})
+        raw_aux_cfgs = [single_aux] if isinstance(single_aux, dict) else []
+
+    for aux_idx, aux_cfg in enumerate(raw_aux_cfgs, start=1):
+        use_aux = bool(aux_cfg.get("enabled", False))
+        w_aux = float(aux_cfg.get("weight", 0.0))
+        aux_algo = str(aux_cfg.get("algorithm", "none")).lower()
+        if (not use_aux) or w_aux <= 0.0:
+            continue
+
+        aux_name = str(aux_cfg.get("name", f"aux{aux_idx}_{aux_algo}")).strip().lower().replace(" ", "_")
+        if not aux_name:
+            aux_name = f"aux{aux_idx}_{aux_algo}"
+
+        aux_retr_cfg = dict(retrieval_cfg)
+        aux_retr_cfg.update(
+            {
+                k: v
+                for k, v in aux_cfg.items()
+                if k not in {"enabled", "weight", "algorithm"}
+            }
+        )
+        aux_retr_cfg["algorithm"] = aux_algo
+        aux_retr_cfg["require_gpu"] = bool(aux_cfg.get("require_gpu", False))
+        if aux_algo in {"bm25", "cosine", "tfidf"}:
+            aux_retr_cfg["use_gpu"] = False
+
+        _log(f"Train aux retrieval for sampled benchmark name={aux_name} algo={aux_algo}")
+        aux_art = build_retrieval_model(train_df, aux_retr_cfg, log_fn=_log)
+        aux_scores = _score_from_retrieval_candidates(
+            artifacts=aux_art,
+            eval_candidates=eval_candidates,
+            k_retrieval=retrieval_eval_k,
+            model_name=aux_name,
+        )
+        source_scores[aux_name] = aux_scores
+        source_weights[aux_name] = w_aux
+
+    weight_sum = sum(max(0.0, float(v)) for v in source_weights.values())
+    if weight_sum <= 0.0:
+        weight_sum = 1.0
 
     hyb_scores: dict[int, np.ndarray] = {}
     for uid in eval_candidates.keys():
-        s_als = als_scores[uid]
-        s_tt = tt_scores[uid]
-        hyb_scores[uid] = w_tt * _ranknorm(s_tt) + w_als * _ranknorm(s_als)
+        combined = None
+        for name, scores in source_scores.items():
+            w = float(source_weights.get(name, 0.0)) / weight_sum
+            if w <= 0.0:
+                continue
+            normed = _ranknorm(scores[uid])
+            combined = (w * normed) if combined is None else (combined + w * normed)
+        if combined is None:
+            combined = np.zeros(len(eval_candidates[uid]), dtype=np.float32)
+        hyb_scores[uid] = combined.astype(np.float32)
 
     pred_als = _to_prediction_lists(als_scores, eval_candidates)
     pred_tt = _to_prediction_lists(tt_scores, eval_candidates)
     pred_hyb = _to_prediction_lists(hyb_scores, eval_candidates)
+    pred_aux = {
+        name: _to_prediction_lists(sc, eval_candidates)
+        for name, sc in source_scores.items()
+        if name not in {"als", "tt"}
+    }
     pred_knn = {name: _to_prediction_lists(sc, eval_candidates) for name, sc in knn_scores.items()}
 
     rows = []
     rows += _eval_rows("als_sampled", gt, pred_als, ks)
     rows += _eval_rows("two_tower_sampled", gt, pred_tt, ks)
     rows += _eval_rows("hybrid_sampled", gt, pred_hyb, ks)
+    for aux_name, pred in pred_aux.items():
+        rows += _eval_rows(f"{aux_name}_sampled", gt, pred, ks)
     for knn_name, pred in pred_knn.items():
         rows += _eval_rows(f"{knn_name}_sampled", gt, pred, ks)
 
     out = pd.DataFrame(rows).sort_values(["model", "k"], kind="mergesort").reset_index(drop=True)
     out.to_csv(out_path, index=False)
     _log(f"Saved benchmark: {out_path}")
+    save_parquet = bool(args.save_parquet or out_cfg.get("save_parquet_tables", False))
+    if save_parquet:
+        parquet_dir = Path(out_cfg.get("parquet_tables_dir", out_path.parent.parent / "parquet"))
+        parquet_dir.mkdir(parents=True, exist_ok=True)
+        pq_path = parquet_dir / f"{out_path.stem}.parquet"
+        try:
+            out.to_parquet(pq_path, index=False)
+            _log(f"Saved benchmark parquet: {pq_path}")
+        except Exception as e:
+            _log(f"benchmark parquet fallback reason={type(e).__name__}: {e}")
     print(out.to_string(index=False))
 
 
