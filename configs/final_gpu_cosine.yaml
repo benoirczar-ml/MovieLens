@@ -1,0 +1,84 @@
+data:
+  dataset_dir: ../LENS/ml-25m
+  min_rating: 3.5
+  max_rows: 1200000
+  val_k: 1
+  test_k: 1
+  min_user_interactions: 5
+
+baseline:
+  enabled: true
+
+retrieval:
+  algorithm: cosine
+  itemknn_k: 200
+  itemknn_num_threads: 8
+  recommend_batch_size: 1024
+  log_every_batches: 5
+  seed: 42
+  use_gpu: false
+  require_gpu: false
+
+ranker:
+  framework: xgboost
+  n_estimators: 260
+  learning_rate: 0.05
+  max_depth: 6
+  subsample: 0.9
+  colsample_bytree: 0.9
+  tree_method: hist
+  device: cuda
+  n_jobs: 2
+  seed: 42
+
+final_model:
+  enabled: true
+  candidate_fusion:
+    enabled: true
+    two_tower_weight: 0.45
+    als_weight: 0.55
+  two_tower:
+    embedding_dim: 64
+    lr: 0.001
+    batch_size: 4096
+    epochs: 8
+    num_negatives: 16
+    weight_decay: 0.000001
+    grad_clip: 2.0
+    neg_sampling_pop_power: 0.75
+    pop_blend_weight: 0.12
+    query_batch_size: 1024
+    candidate_multiplier: 3
+    train_log_every_batches: 50
+    query_log_every_batches: 5
+    use_gpu: true
+    require_gpu: true
+    seed: 42
+  ranker:
+    framework: xgboost
+    n_estimators: 320
+    learning_rate: 0.04
+    max_depth: 6
+    subsample: 0.9
+    colsample_bytree: 0.9
+    tree_method: hist
+    device: cuda
+    n_jobs: 2
+    seed: 42
+  ranker_ensemble:
+    enabled: true
+    baseline_weight: 0.65
+    final_weight: 0.35
+
+evaluation:
+  k_candidates: 200
+  ks: [10, 20, 50]
+
+outputs:
+  tables_dir: outputs/gpu_cosine/tables
+  figures_dir: outputs/gpu_cosine/figures
+
+logging:
+  resource_snapshot: true
+  progress_resources: false
+  gpu_index: 0

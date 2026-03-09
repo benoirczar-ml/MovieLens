@@ -1,0 +1,104 @@
+data:
+  dataset_dir: ../LENS/ml-25m
+  min_rating: 3.5
+  max_rows: null
+  val_k: 1
+  test_k: 1
+  min_user_interactions: 5
+
+baseline:
+  enabled: true
+
+retrieval:
+  algorithm: als
+  factors: 96
+  regularization: 0.02
+  iterations: 15
+  alpha: 40
+  recommend_batch_size: 8192
+  log_every_batches: 10
+  seed: 42
+  use_gpu: true
+  require_gpu: true
+
+ranker:
+  framework: xgboost
+  features_use_gpu: false
+  n_estimators: 260
+  learning_rate: 0.05
+  max_depth: 6
+  subsample: 0.9
+  colsample_bytree: 0.9
+  tree_method: hist
+  device: cuda
+  n_jobs: 2
+  max_bin: 256
+  train_negative_ratio: 80
+  train_max_rows: 7000000
+  train_sample_seed: 42
+  seed: 42
+
+final_model:
+  enabled: true
+  candidate_fusion:
+    enabled: true
+    use_gpu: true
+    two_tower_weight: 0.40
+    als_weight: 0.50
+    aux_retrieval:
+      enabled: true
+      algorithm: cosine
+      weight: 0.10
+      itemknn_k: 200
+      itemknn_num_threads: 0
+      require_gpu: false
+  two_tower:
+    embedding_dim: 64
+    lr: 0.001
+    batch_size: 6144
+    epochs: 6
+    num_negatives: 16
+    weight_decay: 0.000001
+    grad_clip: 2.0
+    neg_sampling_pop_power: 0.75
+    pop_blend_weight: 0.12
+    query_batch_size: 2048
+    candidate_multiplier: 3
+    train_log_every_batches: 100
+    query_log_every_batches: 10
+    use_gpu: true
+    require_gpu: true
+    seed: 42
+  ranker:
+    framework: xgboost
+    features_use_gpu: false
+    n_estimators: 320
+    learning_rate: 0.04
+    max_depth: 6
+    subsample: 0.9
+    colsample_bytree: 0.9
+    tree_method: hist
+    device: cuda
+    n_jobs: 2
+    max_bin: 256
+    train_negative_ratio: 80
+    train_max_rows: 7000000
+    train_sample_seed: 42
+    seed: 42
+  ranker_ensemble:
+    enabled: true
+    baseline_weight: 0.45
+    final_weight: 0.55
+
+evaluation:
+  k_candidates: 120
+  ks: [10, 20, 50]
+
+outputs:
+  tables_dir: outputs/fullrun_gpu_hybrid3_cosine_gpuheavy_fasttrain/tables
+  figures_dir: outputs/fullrun_gpu_hybrid3_cosine_gpuheavy_fasttrain/figures
+
+logging:
+  resource_snapshot: true
+  progress_resources: true
+  gpu_index: 0

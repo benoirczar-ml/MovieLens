@@ -1,0 +1,47 @@
+log_file=outputs/tmp/logs/pipeline.log
+[2026-03-08 16:53:01] Pipeline start | cpu=0% ram=9% gpu=28% vram=11% gpu_temp=44C
+[2026-03-08 16:53:01] Outputs: tables=outputs/tables figures=outputs/figures
+[2026-03-08 16:53:01] Stage data.load done in 0.5s | rows=748,896 users=8,081 items=17,919 | cpu=16% ram=9% gpu=49% vram=11% gpu_temp=44C
+[2026-03-08 16:53:02] Stage data.split done in 0.2s | train=732,676 val=8,035 test=8,035 users_train=8,035 items_train=17,779 | cpu=15% ram=9% gpu=30% vram=11% gpu_temp=44C
+[2026-03-08 16:53:02] Eval users: val=8,035 test=8,035
+[2026-03-08 16:53:02] Eval setup: k_candidates=200 ks=[10, 20, 50]
+[2026-03-08 16:53:02] baseline.retrieval.setup algo=als users=8,035 items=17,779 interactions=732,676
+/home/zxczxc/mambaforge/envs/trainer/lib/python3.10/site-packages/implicit/cpu/als.py:95: RuntimeWarning: OpenBLAS is configured to use 16 threads. It is highly recommended to disable its internal threadpool by setting the environment variable 'OPENBLAS_NUM_THREADS=1' or by calling 'threadpoolctl.threadpool_limits(1, "blas")'. Having OpenBLAS use a threadpool can lead to severe performance issues here.
+  check_blas_config()
+  0%|          | 0/15 [00:00<?, ?it/s] 13%|#3        | 2/15 [00:00<00:01, 11.31it/s] 27%|##6       | 4/15 [00:00<00:00, 13.71it/s] 40%|####      | 6/15 [00:00<00:00, 13.93it/s] 53%|#####3    | 8/15 [00:00<00:00, 14.10it/s] 67%|######6   | 10/15 [00:00<00:00, 14.72it/s] 80%|########  | 12/15 [00:00<00:00, 14.16it/s] 93%|#########3| 14/15 [00:00<00:00, 14.58it/s]100%|##########| 15/15 [00:01<00:00, 14.18it/s]
+[2026-03-08 16:53:03] baseline.retrieval.fit algo=als use_gpu=False done_in=1.1s
+[2026-03-08 16:53:04] Stage baseline.retrieval.train done in 1.7s | algo=als | cpu=57% ram=10% gpu=7% vram=11% gpu_temp=44C
+[2026-03-08 16:53:04] baseline.retrieval.candidates start users=8,035 batch_size=1024 batches=8
+[2026-03-08 16:53:06] baseline.retrieval.candidates progress users=8,035/8,035 (100.0%)
+[2026-03-08 16:53:06] baseline.retrieval.candidates start users=8,035 batch_size=1024 batches=8
+[2026-03-08 16:53:09] baseline.retrieval.candidates progress users=8,035/8,035 (100.0%)
+[2026-03-08 16:53:09] Stage baseline.retrieval.candidates done in 5.3s | val_rows=1,607,000 test_rows=1,607,000 | cpu=99% ram=11% gpu=49% vram=11% gpu_temp=46C
+[2026-03-08 16:53:10] Stage baseline.retrieval.eval done in 1.1s
+[2026-03-08 16:53:10] ranker.features start candidate_rows=1,607,000 train_rows=732,676 target_rows=8,035
+[2026-03-08 16:53:11] ranker.features base_signals_done
+[2026-03-08 16:53:11] ranker.features genre_signals_done
+[2026-03-08 16:53:12] ranker.features done rows=1,607,000 feature_cols=21 positive_rate=0.0029
+[2026-03-08 16:53:12] ranker.features start candidate_rows=1,607,000 train_rows=732,676 target_rows=8,035
+[2026-03-08 16:53:13] ranker.features base_signals_done
+[2026-03-08 16:53:13] ranker.features genre_signals_done
+[2026-03-08 16:53:13] ranker.features done rows=1,607,000 feature_cols=21 positive_rate=0.0026
+[2026-03-08 16:53:14] Stage baseline.ranker.features done in 3.4s | train_rows=1,607,000 test_rows=1,607,000 | cpu=13% ram=14% gpu=26% vram=11% gpu_temp=46C
+[2026-03-08 16:53:14] ranker.train start rows=1,607,000 cols=21 positive_rate=0.0029
+[2026-03-08 16:53:23] ranker.train done framework=xgboost device=cpu in=8.3s
+[2026-03-08 16:53:23] ranker.score start rows=1,607,000 cols=21
+[2026-03-08 16:53:24] ranker.score done rows=1,607,000
+[2026-03-08 16:53:24] Stage baseline.ranker.train+score done in 10.2s | scored_rows=1,607,000 | cpu=38% ram=14% gpu=21% vram=12% gpu_temp=47C
+[2026-03-08 16:53:25] Stage baseline.ranker.eval done in 1.0s
+[2026-03-08 16:53:25] Saved: outputs/tables/metrics_baseline.csv
+[2026-03-08 16:53:25] Saved: outputs/tables/metrics_comparison.csv
+[2026-03-08 16:53:26] Stage plot.save done in 0.7s
+[2026-03-08 16:53:26] Saved: outputs/tables/split_stats.csv
+[2026-03-08 16:53:26] Pipeline done in 25.1s | cpu=13% ram=13% gpu=26% vram=12% gpu_temp=47C
+saved=outputs/tables/metrics_comparison.csv
+                 model  k   recall     ndcg      map      mrr  users
+baseline_retrieval_als 10 0.077162 0.038155 0.026464 0.026464   8035
+baseline_retrieval_als 20 0.131674 0.051805 0.030141 0.030141   8035
+baseline_retrieval_als 50 0.253267 0.075800 0.033934 0.033934   8035
+       baseline_ranker 10 0.083385 0.040383 0.027519 0.027519   8035
+       baseline_ranker 20 0.135034 0.053342 0.031025 0.031025   8035
+       baseline_ranker 50 0.257623 0.077547 0.034865 0.034865   8035

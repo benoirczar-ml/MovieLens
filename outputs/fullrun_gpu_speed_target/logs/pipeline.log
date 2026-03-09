@@ -1,0 +1,79 @@
+log_file=outputs/fullrun_gpu_speed_target/logs/pipeline.log
+[2026-03-09 00:41:19] Pipeline start | cpu=0% ram=7% gpu=0% vram=5% gpu_temp=52C
+[2026-03-09 00:41:19] Outputs: tables=outputs/fullrun_gpu_speed_target/tables figures=outputs/fullrun_gpu_speed_target/figures
+[2026-03-09 00:41:35] Stage data.load done in 16.1s | rows=15,630,129 users=162,414 items=47,396 | cpu=11% ram=8% gpu=0% vram=5% gpu_temp=52C
+[2026-03-09 00:41:47] Stage data.split done in 11.3s | train=15,304,489 val=161,578 test=161,578 users_train=161,578 items_train=47,187 | cpu=9% ram=10% gpu=0% vram=5% gpu_temp=51C
+[2026-03-09 00:41:48] Eval users: val=161,578 test=161,578
+[2026-03-09 00:41:48] Eval setup: k_candidates=60 ks=[10, 20, 50]
+[2026-03-09 00:41:48] Baseline stages are disabled (baseline.enabled=false)
+[2026-03-09 00:41:50] final.twotower.setup device=cuda users=161,578 items=47,187 pairs=15,304,489 batch_size=8192 negatives=8 | cpu=11% ram=16% gpu=0% vram=7% gpu_temp=53C
+[2026-03-09 00:42:02] final.twotower.train progress epoch=1/1 batch=80/1869 loss=0.6931 seen_pairs=655,360 (4.3%) | cpu=12% ram=17% gpu=46% vram=10% gpu_temp=56C
+[2026-03-09 00:42:03] final.twotower.train progress epoch=1/1 batch=160/1869 loss=0.6933 seen_pairs=1,310,720 (8.6%) | cpu=10% ram=17% gpu=46% vram=10% gpu_temp=57C
+[2026-03-09 00:42:05] final.twotower.train progress epoch=1/1 batch=240/1869 loss=0.6931 seen_pairs=1,966,080 (12.8%) | cpu=10% ram=17% gpu=46% vram=10% gpu_temp=57C
+[2026-03-09 00:42:06] final.twotower.train progress epoch=1/1 batch=320/1869 loss=0.6925 seen_pairs=2,621,440 (17.1%) | cpu=10% ram=17% gpu=47% vram=10% gpu_temp=57C
+[2026-03-09 00:42:07] final.twotower.train progress epoch=1/1 batch=400/1869 loss=0.6912 seen_pairs=3,276,800 (21.4%) | cpu=11% ram=17% gpu=46% vram=10% gpu_temp=57C
+[2026-03-09 00:42:09] final.twotower.train progress epoch=1/1 batch=480/1869 loss=0.6863 seen_pairs=3,932,160 (25.7%) | cpu=10% ram=17% gpu=45% vram=10% gpu_temp=58C
+[2026-03-09 00:42:10] final.twotower.train progress epoch=1/1 batch=560/1869 loss=0.6732 seen_pairs=4,587,520 (30.0%) | cpu=10% ram=17% gpu=43% vram=10% gpu_temp=58C
+[2026-03-09 00:42:12] final.twotower.train progress epoch=1/1 batch=640/1869 loss=0.6468 seen_pairs=5,242,880 (34.2%) | cpu=10% ram=17% gpu=44% vram=10% gpu_temp=58C
+[2026-03-09 00:42:13] final.twotower.train progress epoch=1/1 batch=720/1869 loss=0.6133 seen_pairs=5,898,240 (38.5%) | cpu=10% ram=17% gpu=40% vram=10% gpu_temp=58C
+[2026-03-09 00:42:14] final.twotower.train progress epoch=1/1 batch=800/1869 loss=0.5823 seen_pairs=6,553,600 (42.8%) | cpu=10% ram=17% gpu=45% vram=10% gpu_temp=58C
+[2026-03-09 00:42:16] final.twotower.train progress epoch=1/1 batch=880/1869 loss=0.5529 seen_pairs=7,208,960 (47.1%) | cpu=10% ram=17% gpu=44% vram=10% gpu_temp=59C
+[2026-03-09 00:42:17] final.twotower.train progress epoch=1/1 batch=960/1869 loss=0.5354 seen_pairs=7,864,320 (51.4%) | cpu=10% ram=17% gpu=44% vram=10% gpu_temp=59C
+[2026-03-09 00:42:18] final.twotower.train progress epoch=1/1 batch=1040/1869 loss=0.5166 seen_pairs=8,519,680 (55.6%) | cpu=11% ram=17% gpu=45% vram=10% gpu_temp=59C
+[2026-03-09 00:42:20] final.twotower.train progress epoch=1/1 batch=1120/1869 loss=0.5071 seen_pairs=9,175,040 (59.9%) | cpu=10% ram=17% gpu=47% vram=10% gpu_temp=59C
+[2026-03-09 00:42:19] final.twotower.train progress epoch=1/1 batch=1200/1869 loss=0.4917 seen_pairs=9,830,400 (64.2%) | cpu=11% ram=17% gpu=46% vram=10% gpu_temp=60C
+[2026-03-09 00:42:21] final.twotower.train progress epoch=1/1 batch=1280/1869 loss=0.4818 seen_pairs=10,485,760 (68.5%) | cpu=11% ram=17% gpu=46% vram=10% gpu_temp=60C
+[2026-03-09 00:42:22] final.twotower.train progress epoch=1/1 batch=1360/1869 loss=0.4732 seen_pairs=11,141,120 (72.8%) | cpu=10% ram=17% gpu=45% vram=10% gpu_temp=60C
+[2026-03-09 00:42:23] final.twotower.train progress epoch=1/1 batch=1440/1869 loss=0.4699 seen_pairs=11,796,480 (77.0%) | cpu=12% ram=17% gpu=46% vram=10% gpu_temp=60C
+[2026-03-09 00:42:25] final.twotower.train progress epoch=1/1 batch=1520/1869 loss=0.4591 seen_pairs=12,451,840 (81.3%) | cpu=12% ram=17% gpu=46% vram=10% gpu_temp=61C
+[2026-03-09 00:42:26] final.twotower.train progress epoch=1/1 batch=1600/1869 loss=0.4487 seen_pairs=13,107,200 (85.6%) | cpu=16% ram=17% gpu=45% vram=10% gpu_temp=60C
+[2026-03-09 00:42:27] final.twotower.train progress epoch=1/1 batch=1680/1869 loss=0.4519 seen_pairs=13,762,560 (89.9%) | cpu=10% ram=17% gpu=46% vram=10% gpu_temp=61C
+[2026-03-09 00:42:29] final.twotower.train progress epoch=1/1 batch=1760/1869 loss=0.4446 seen_pairs=14,417,920 (94.2%) | cpu=11% ram=17% gpu=46% vram=10% gpu_temp=61C
+[2026-03-09 00:42:30] final.twotower.train progress epoch=1/1 batch=1840/1869 loss=0.4384 seen_pairs=15,073,280 (98.4%) | cpu=10% ram=17% gpu=44% vram=10% gpu_temp=61C
+[2026-03-09 00:42:31] final.twotower.train progress epoch=1/1 batch=1869/1869 loss=0.4494 seen_pairs=15,304,489 (100.0%) | cpu=11% ram=17% gpu=44% vram=10% gpu_temp=61C
+[2026-03-09 00:42:31] final.twotower.train epoch_done epoch=1/1 avg_loss=0.56565 | cpu=7% ram=17% gpu=44% vram=10% gpu_temp=61C
+[2026-03-09 00:42:31] Stage final.twotower.train done in 46.6s | cpu=12% ram=15% gpu=24% vram=10% gpu_temp=61C
+[2026-03-09 00:42:36] final.twotower.candidates start users=161,578 topn=120 batch_size=4096 batches=40 | cpu=9% ram=19% gpu=0% vram=10% gpu_temp=57C
+[2026-03-09 00:42:40] final.twotower.candidates progress users=40,960/161,578 (25.3%) | cpu=10% ram=23% gpu=0% vram=28% gpu_temp=57C
+[2026-03-09 00:42:43] final.twotower.candidates progress users=81,920/161,578 (50.7%) | cpu=10% ram=26% gpu=0% vram=28% gpu_temp=57C
+[2026-03-09 00:42:47] final.twotower.candidates progress users=122,880/161,578 (76.0%) | cpu=11% ram=30% gpu=14% vram=28% gpu_temp=56C
+[2026-03-09 00:42:50] final.twotower.candidates progress users=161,578/161,578 (100.0%) | cpu=11% ram=33% gpu=18% vram=28% gpu_temp=56C
+[2026-03-09 00:42:59] final.twotower.candidates start users=161,578 topn=120 batch_size=4096 batches=40 | cpu=11% ram=21% gpu=0% vram=28% gpu_temp=55C
+[2026-03-09 00:43:02] final.twotower.candidates progress users=40,960/161,578 (25.3%) | cpu=9% ram=24% gpu=0% vram=28% gpu_temp=56C
+[2026-03-09 00:43:05] final.twotower.candidates progress users=81,920/161,578 (50.7%) | cpu=9% ram=27% gpu=0% vram=28% gpu_temp=55C
+[2026-03-09 00:43:09] final.twotower.candidates progress users=122,880/161,578 (76.0%) | cpu=10% ram=30% gpu=0% vram=28% gpu_temp=56C
+[2026-03-09 00:43:12] final.twotower.candidates progress users=161,578/161,578 (100.0%) | cpu=9% ram=33% gpu=18% vram=28% gpu_temp=55C
+[2026-03-09 00:43:18] Stage final.twotower.candidates done in 48.5s | val_rows=9,678,413 test_rows=9,678,413 | cpu=9% ram=21% gpu=0% vram=28% gpu_temp=55C
+[2026-03-09 00:43:30] Stage final.retrieval.eval done in 13.8s
+[2026-03-09 00:43:35] ranker.features context_ready backend=cudf genre_vocab=19 user_recent_masks=161,578 | cpu=12% ram=22% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:35] ranker.features start candidate_rows=9,678,413 train_rows=15,304,489 target_rows=161,578 | cpu=7% ram=22% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:35] ranker.features backend=cudf | cpu=12% ram=22% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:39] ranker.features base_signals_done | cpu=10% ram=29% gpu=0% vram=51% gpu_temp=55C
+[2026-03-09 00:43:40] ranker.features genre_signals_done | cpu=12% ram=31% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:44] ranker.features done rows=9,678,413 feature_cols=21 positive_rate=0.0029 | cpu=11% ram=31% gpu=0% vram=29% gpu_temp=54C
+[2026-03-09 00:43:44] ranker.features start candidate_rows=9,678,413 train_rows=15,304,489 target_rows=161,578 | cpu=9% ram=29% gpu=0% vram=29% gpu_temp=54C
+[2026-03-09 00:43:44] ranker.features backend=cudf | cpu=10% ram=29% gpu=0% vram=29% gpu_temp=54C
+[2026-03-09 00:43:48] ranker.features base_signals_done | cpu=10% ram=36% gpu=0% vram=51% gpu_temp=55C
+[2026-03-09 00:43:49] ranker.features genre_signals_done | cpu=11% ram=38% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:51] ranker.features done rows=9,678,413 feature_cols=21 positive_rate=0.0026 | cpu=11% ram=38% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:51] Stage final.ranker.features done in 23.0s | train_rows=9,678,413 test_rows=9,678,413 | cpu=8% ram=36% gpu=0% vram=29% gpu_temp=55C
+[2026-03-09 00:43:53] ranker.train sampled rows=1,143,777 positive_rate=0.0244 max_rows=3000000 neg_ratio=40.00 | cpu=12% ram=37% gpu=0% vram=29% gpu_temp=56C
+[2026-03-09 00:43:53] ranker.train start rows=1,143,777 cols=21 positive_rate=0.0244 | cpu=6% ram=37% gpu=0% vram=29% gpu_temp=56C
+[2026-03-09 00:43:57] ranker.train done framework=xgboost device=cuda in=3.7s | cpu=13% ram=37% gpu=52% vram=29% gpu_temp=60C
+[2026-03-09 00:43:58] ranker.score start rows=9,678,413 cols=21 | cpu=19% ram=40% gpu=0% vram=29% gpu_temp=60C
+[2026-03-09 00:43:59] ranker.score done rows=9,678,413 | cpu=16% ram=45% gpu=83% vram=39% gpu_temp=66C
+[2026-03-09 00:43:59] Stage final.ranker.train+score done in 8.3s | scored_rows=9,678,413 | cpu=13% ram=42% gpu=30% vram=29% gpu_temp=66C
+[2026-03-09 00:44:16] Stage final.ranker.eval done in 16.9s
+[2026-03-09 00:44:16] Saved: outputs/fullrun_gpu_speed_target/tables/metrics_final.csv
+[2026-03-09 00:44:17] Saved: outputs/fullrun_gpu_speed_target/tables/metrics_comparison.csv
+[2026-03-09 00:44:17] Stage plot.save done in 0.5s
+[2026-03-09 00:44:17] Saved: outputs/fullrun_gpu_speed_target/tables/split_stats.csv
+[2026-03-09 00:44:17] Pipeline done in 187.4s | cpu=12% ram=28% gpu=0% vram=29% gpu_temp=55C
+saved=outputs/fullrun_gpu_speed_target/tables/metrics_comparison.csv
+                          model  k   recall  hitrate     ndcg      map      mrr  users
+final_retrieval_two_tower_faiss 10 0.043477 0.043477 0.021134 0.014461 0.014461 161578
+final_retrieval_two_tower_faiss 20 0.076038 0.076038 0.029284 0.016655 0.016655 161578
+final_retrieval_two_tower_faiss 50 0.147211 0.147211 0.043344 0.018886 0.018886 161578
+         final_ranker_two_tower 10 0.060033 0.060033 0.030610 0.021745 0.021745 161578
+         final_ranker_two_tower 20 0.093979 0.093979 0.039139 0.024057 0.024057 161578
+         final_ranker_two_tower 50 0.151227 0.151227 0.050534 0.025900 0.025900 161578

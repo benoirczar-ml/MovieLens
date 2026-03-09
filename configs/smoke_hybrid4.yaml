@@ -1,0 +1,112 @@
+data:
+  dataset_dir: ../LENS/ml-25m
+  min_rating: 3.5
+  max_rows: 250000
+  val_k: 1
+  test_k: 1
+  min_user_interactions: 5
+
+baseline:
+  enabled: true
+
+retrieval:
+  algorithm: als
+  factors: 64
+  regularization: 0.02
+  iterations: 4
+  alpha: 30
+  recommend_batch_size: 4096
+  log_every_batches: 5
+  seed: 42
+  use_gpu: true
+  require_gpu: true
+
+ranker:
+  framework: xgboost
+  features_use_gpu: true
+  n_estimators: 40
+  learning_rate: 0.08
+  max_depth: 5
+  subsample: 0.9
+  colsample_bytree: 0.9
+  tree_method: hist
+  device: cuda
+  n_jobs: 2
+  max_bin: 128
+  seed: 42
+
+final_model:
+  enabled: true
+  candidate_fusion:
+    enabled: true
+    use_gpu: true
+    chunk_users: 800
+    two_tower_weight: 0.42
+    als_weight: 0.40
+    aux_retrievals:
+      - name: aux_cosine
+        enabled: true
+        algorithm: cosine
+        weight: 0.10
+        itemknn_k: 60
+        itemknn_num_threads: 0
+        require_gpu: false
+      - name: aux_als_alt
+        enabled: true
+        algorithm: als
+        weight: 0.08
+        factors: 48
+        regularization: 0.03
+        iterations: 3
+        alpha: 20
+        recommend_batch_size: 4096
+        log_every_batches: 5
+        require_gpu: true
+  two_tower:
+    embedding_dim: 64
+    lr: 0.001
+    batch_size: 2048
+    epochs: 1
+    num_negatives: 8
+    weight_decay: 0.000001
+    grad_clip: 2.0
+    neg_sampling_pop_power: 0.75
+    pop_blend_weight: 0.12
+    query_batch_size: 1024
+    candidate_multiplier: 3
+    train_log_every_batches: 20
+    query_log_every_batches: 5
+    use_gpu: true
+    require_gpu: true
+    seed: 42
+  ranker:
+    framework: xgboost
+    features_use_gpu: false
+    chunk_users: 8000
+    n_estimators: 50
+    learning_rate: 0.08
+    max_depth: 5
+    subsample: 0.9
+    colsample_bytree: 0.9
+    tree_method: hist
+    device: cuda
+    n_jobs: 2
+    max_bin: 128
+    seed: 42
+  ranker_ensemble:
+    enabled: true
+    baseline_weight: 0.35
+    final_weight: 0.65
+
+evaluation:
+  k_candidates: 60
+  ks: [10, 20]
+
+outputs:
+  tables_dir: outputs/smoke_hybrid4/tables
+  figures_dir: outputs/smoke_hybrid4/figures
+
+logging:
+  resource_snapshot: true
+  progress_resources: true
+  gpu_index: 0

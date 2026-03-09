@@ -1,0 +1,12 @@
+baseline_weight,final_weight,k,ranker_recall,ranker_ndcg,ranker_map,ranker_mrr,mode,scores_dir
+0.35,0.65,20,0.1779078834989912,0.07412207020727309,0.04566143417984916,0.04566143417984916,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.3,0.7,20,0.1779326393444652,0.0741203114818553,0.045658115188771956,0.045658115188771956,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.45,0.55,20,0.17781504907846366,0.07412029896507866,0.04569215776625684,0.04569215776625684,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.4,0.6,20,0.17777791531025264,0.0741093722646853,0.0456765640226686,0.0456765640226686,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.2,0.8,20,0.1778955055762542,0.07408248090188084,0.04562780865428168,0.04562780865428168,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.25,0.75,20,0.1779078834989912,0.0740770558649784,0.04561393622640127,0.04561393622640127,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.5,0.5,20,0.17739419970540543,0.07373332935786397,0.045295158654435584,0.045295158654435584,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.55,0.44999999999999996,20,0.17718996398024484,0.07353707962301942,0.045096124985932816,0.045096124985932816,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.6,0.4,20,0.17696097240961023,0.07329867013641794,0.04484725372771893,0.04484725372771893,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.65,0.35,20,0.176515367191078,0.07308054250304037,0.04468854804603913,0.04468854804603913,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores
+0.7,0.30000000000000004,20,0.17621210808402135,0.0728699008578009,0.044509785379622434,0.044509785379622434,fast_saved_scores,outputs/fullrun_gpu_quality_goal_stable_cpufeat_k220_chunked/ranker_scores

@@ -1,0 +1,55 @@
+data:
+  dataset_dir: ../LENS/ml-25m
+  min_rating: 3.5
+  max_rows: 1200000
+  val_k: 1
+  test_k: 1
+  min_user_interactions: 5
+
+retrieval:
+  algorithm: als
+  factors: 96
+  regularization: 0.02
+  iterations: 15
+  alpha: 40
+  seed: 42
+  use_gpu: false
+
+ranker:
+  framework: xgboost
+  n_estimators: 260
+  learning_rate: 0.05
+  max_depth: 6
+  subsample: 0.9
+  colsample_bytree: 0.9
+  tree_method: hist
+  n_jobs: 6
+  seed: 42
+
+final_model:
+  enabled: false
+  two_tower:
+    embedding_dim: 64
+    lr: 0.001
+    batch_size: 4096
+    epochs: 2
+    use_gpu: false
+    seed: 42
+  ranker:
+    framework: xgboost
+    n_estimators: 320
+    learning_rate: 0.04
+    max_depth: 6
+    subsample: 0.9
+    colsample_bytree: 0.9
+    tree_method: hist
+    n_jobs: 6
+    seed: 42
+
+evaluation:
+  k_candidates: 200
+  ks: [10, 20, 50]
+
+outputs:
+  tables_dir: outputs/tables
+  figures_dir: outputs/figures

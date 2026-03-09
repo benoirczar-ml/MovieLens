@@ -1,0 +1,252 @@
+log_file=outputs/smoke_hybrid4_chunked/logs/pipeline.log
+[2026-03-09 16:11:43] Pipeline start | cpu=0% ram=6% gpu=0% vram=6% gpu_temp=48C
+[2026-03-09 16:11:43] Outputs: tables=outputs/smoke_hybrid4/tables figures=outputs/smoke_hybrid4/figures
+[2026-03-09 16:11:43] Stage data.load done in 0.1s | rows=157,152 users=1,751 items=11,152 | cpu=16% ram=6% gpu=0% vram=6% gpu_temp=48C
+[2026-03-09 16:11:43] Stage data.split done in 0.1s | train=153,639 val=1,742 test=1,742 users_train=1,742 items_train=11,056 | cpu=19% ram=6% gpu=0% vram=6% gpu_temp=48C
+[2026-03-09 16:11:43] Eval users: val=1,742 test=1,742
+[2026-03-09 16:11:43] Eval setup: k_candidates=60 ks=[10, 20]
+[2026-03-09 16:11:43] baseline.retrieval.setup algo=als users=1,742 items=11,056 interactions=153,639 | cpu=23% ram=6% gpu=0% vram=6% gpu_temp=48C
+  0%|          | 0/4 [00:00<?, ?it/s] 25%|##5       | 1/4 [00:00<00:00,  5.14it/s]100%|##########| 4/4 [00:00<00:00, 18.53it/s]
+[2026-03-09 16:11:45] baseline.retrieval.fit algo=als use_gpu=True done_in=0.7s | cpu=12% ram=7% gpu=1% vram=7% gpu_temp=51C
+[2026-03-09 16:11:45] Stage baseline.retrieval.train done in 2.0s | algo=als | cpu=12% ram=7% gpu=13% vram=7% gpu_temp=51C
+[2026-03-09 16:11:45] baseline.retrieval.candidates start users=1,742 batch_size=4096 batches=1 | cpu=13% ram=7% gpu=13% vram=7% gpu_temp=51C
+[2026-03-09 16:11:45] baseline.retrieval.candidates progress users=1,742/1,742 (100.0%) | cpu=11% ram=7% gpu=30% vram=51% gpu_temp=51C
+[2026-03-09 16:11:46] baseline.retrieval.candidates reuse test_from_val=true | cpu=11% ram=7% gpu=7% vram=51% gpu_temp=51C
+[2026-03-09 16:11:46] Stage baseline.retrieval.candidates done in 0.4s | val_rows=104,520 test_rows=104,520 reused_from_val=True | cpu=10% ram=7% gpu=7% vram=51% gpu_temp=50C
+[2026-03-09 16:11:46] Stage baseline.retrieval.eval done in 0.1s
+[2026-03-09 16:11:50] ranker.features context_ready backend=cudf genre_vocab=19 user_recent_masks=1,742 | cpu=8% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features start candidate_rows=104,520 train_rows=153,639 target_rows=1,742 | cpu=8% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features backend=cudf | cpu=9% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merges_start backend=cudf rows=104,520 | cpu=9% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=user_cnt rows=104,520 in=0.0s | cpu=10% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=item_cnt rows=104,520 in=0.0s | cpu=15% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=user_mean rows=104,520 in=0.0s | cpu=15% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=item_mean rows=104,520 in=0.0s | cpu=13% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=user_last_ts rows=104,520 in=0.0s | cpu=18% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=user_first_ts rows=104,520 in=0.0s | cpu=17% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=item_last_ts rows=104,520 in=0.0s | cpu=17% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:50] ranker.features merge_done backend=cudf name=query_ts rows=104,520 in=0.0s | cpu=14% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:51] ranker.features to_pandas_start rows=104,520 | cpu=14% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:51] ranker.features to_pandas_done rows=104,520 in=0.4s | cpu=12% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features base_signals_done | cpu=8% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features genre_signals_done | cpu=12% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features labels_ready rows=1,742 | cpu=19% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features labels_merged rows=104,520 in=0.0s | cpu=20% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features done rows=104,520 feature_cols=21 positive_rate=0.0049 | cpu=14% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features start candidate_rows=104,520 train_rows=153,639 target_rows=1,742 | cpu=19% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features backend=cudf | cpu=15% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merges_start backend=cudf rows=104,520 | cpu=14% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merge_done backend=cudf name=user_cnt rows=104,520 in=0.0s | cpu=19% ram=8% gpu=0% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merge_done backend=cudf name=item_cnt rows=104,520 in=0.0s | cpu=15% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merge_done backend=cudf name=user_mean rows=104,520 in=0.0s | cpu=15% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merge_done backend=cudf name=item_mean rows=104,520 in=0.0s | cpu=14% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:52] ranker.features merge_done backend=cudf name=user_last_ts rows=104,520 in=0.0s | cpu=15% ram=8% gpu=1% vram=51% gpu_temp=50C
+[2026-03-09 16:11:53] ranker.features merge_done backend=cudf name=user_first_ts rows=104,520 in=0.0s | cpu=16% ram=8% gpu=1% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features merge_done backend=cudf name=item_last_ts rows=104,520 in=0.0s | cpu=12% ram=8% gpu=1% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features merge_done backend=cudf name=query_ts rows=104,520 in=0.0s | cpu=20% ram=8% gpu=1% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features to_pandas_start rows=104,520 | cpu=14% ram=8% gpu=1% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features to_pandas_done rows=104,520 in=0.1s | cpu=16% ram=8% gpu=6% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features base_signals_done | cpu=16% ram=8% gpu=6% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features genre_signals_done | cpu=13% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features labels_ready rows=1,742 | cpu=15% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features labels_merged rows=104,520 in=0.0s | cpu=18% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] ranker.features done rows=104,520 feature_cols=21 positive_rate=0.0044 | cpu=17% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:53] Stage baseline.ranker.features done in 7.7s | train_rows=104,520 test_rows=104,520 | cpu=18% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] ranker.train start rows=104,520 cols=21 positive_rate=0.0049 | cpu=20% ram=8% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] ranker.train done framework=xgboost device=cuda in=1.5s | cpu=10% ram=9% gpu=69% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] ranker.score start rows=104,520 cols=21 | cpu=15% ram=9% gpu=69% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] ranker.score done rows=104,520 | cpu=10% ram=9% gpu=12% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] Stage baseline.ranker.train+score done in 2.7s | scored_rows=104,520 | cpu=8% ram=9% gpu=12% vram=51% gpu_temp=49C
+[2026-03-09 16:11:54] Stage baseline.ranker.eval done in 0.1s
+[2026-03-09 16:11:54] Saved: outputs/smoke_hybrid4/tables/metrics_baseline.csv
+[2026-03-09 16:11:59] final.twotower.setup device=cuda users=1,742 items=11,056 pairs=153,639 batch_size=2048 negatives=8 | cpu=9% ram=10% gpu=0% vram=51% gpu_temp=49C
+[2026-03-09 16:12:01] final.twotower.train progress epoch=1/1 batch=20/76 loss=0.6934 seen_pairs=40,960 (26.3%) | cpu=10% ram=11% gpu=38% vram=52% gpu_temp=49C
+[2026-03-09 16:12:01] final.twotower.train progress epoch=1/1 batch=40/76 loss=0.6938 seen_pairs=81,920 (52.6%) | cpu=10% ram=11% gpu=27% vram=52% gpu_temp=49C
+[2026-03-09 16:12:01] final.twotower.train progress epoch=1/1 batch=60/76 loss=0.6937 seen_pairs=122,880 (78.9%) | cpu=16% ram=11% gpu=47% vram=52% gpu_temp=49C
+[2026-03-09 16:12:02] final.twotower.train progress epoch=1/1 batch=76/76 loss=0.6928 seen_pairs=153,639 (100.0%) | cpu=14% ram=11% gpu=43% vram=52% gpu_temp=49C
+[2026-03-09 16:12:02] final.twotower.train epoch_done epoch=1/1 avg_loss=0.69340 | cpu=11% ram=11% gpu=43% vram=52% gpu_temp=49C
+[2026-03-09 16:12:02] Stage final.twotower.train done in 7.6s | cpu=14% ram=11% gpu=7% vram=52% gpu_temp=49C
+[2026-03-09 16:12:02] final.twotower.candidates start users=1,742 topn=180 batch_size=1024 batches=2 | cpu=20% ram=11% gpu=7% vram=52% gpu_temp=49C
+[2026-03-09 16:12:02] final.twotower.candidates progress users=1,742/1,742 (100.0%) | cpu=17% ram=12% gpu=6% vram=53% gpu_temp=49C
+[2026-03-09 16:12:02] final.twotower.candidates reuse test_from_val=true | cpu=10% ram=12% gpu=6% vram=53% gpu_temp=49C
+[2026-03-09 16:12:03] Stage final.twotower.candidates done in 0.8s | val_rows=104,520 test_rows=104,520 reused_from_val=True | cpu=7% ram=12% gpu=6% vram=53% gpu_temp=49C
+[2026-03-09 16:12:03] baseline.retrieval.setup algo=cosine users=1,742 items=11,056 interactions=153,639 | cpu=10% ram=12% gpu=0% vram=53% gpu_temp=49C
+/home/zxczxc/mambaforge/envs/trainer/lib/python3.10/site-packages/implicit/utils.py:164: ParameterWarning: Method expects CSR input, and was passed coo_matrix instead. Converting to CSR took 0.000370025634765625 seconds
+  warnings.warn(
+  0%|          | 0/11056 [00:00<?, ?it/s] 26%|##5       | 2851/11056 [00:00<00:00, 28503.57it/s] 26%|##5       | 2858/11056 [00:00<00:00, 28378.53it/s] 26%|##5       | 2859/11056 [00:00<00:00, 28378.53it/s] 26%|##5       | 2860/11056 [00:00<00:00, 28378.53it/s] 26%|##5       | 2863/11056 [00:00<00:00, 28378.53it/s] 26%|##5       | 2870/11056 [00:00<00:00, 28378.53it/s] 26%|##6       | 2910/11056 [00:00<00:00, 28378.53it/s] 26%|##6       | 2919/11056 [00:00<00:00, 28378.53it/s] 52%|#####2    | 5761/11056 [00:00<00:00, 26402.06it/s] 52%|#####2    | 5769/11056 [00:00<00:00, 23074.13it/s] 52%|#####2    | 5771/11056 [00:00<00:00, 23074.13it/s] 52%|#####2    | 5779/11056 [00:00<00:00, 23074.13it/s] 52%|#####2    | 5784/11056 [00:00<00:00, 23074.13it/s] 52%|#####2    | 5795/11056 [00:00<00:00, 23074.13it/s] 52%|#####2    | 5801/11056 [00:00<00:00, 23074.13it/s] 53%|#####2    | 5812/11056 [00:00<00:00, 23074.13it/s] 74%|#######3  | 8143/11056 [00:00<00:00, 22903.10it/s] 74%|#######3  | 8150/11056 [00:00<00:00, 22443.71it/s] 74%|#######3  | 8153/11056 [00:00<00:00, 22443.71it/s] 74%|#######3  | 8158/11056 [00:00<00:00, 22443.71it/s] 74%|#######3  | 8165/11056 [00:00<00:00, 22443.71it/s] 74%|#######3  | 8180/11056 [00:00<00:00, 22443.71it/s] 74%|#######4  | 8190/11056 [00:00<00:00, 22443.71it/s] 74%|#######4  | 8211/11056 [00:00<00:00, 22443.71it/s] 95%|#########4| 10476/11056 [00:00<00:00, 22169.27it/s] 95%|#########4| 10483/11056 [00:00<00:00, 21551.36it/s] 95%|#########4| 10484/11056 [00:00<00:00, 21551.36it/s] 95%|#########4| 10489/11056 [00:00<00:00, 21551.36it/s] 95%|#########4| 10500/11056 [00:00<00:00, 21551.36it/s] 95%|#########5| 10513/11056 [00:00<00:00, 21551.36it/s] 95%|#########5| 10521/11056 [00:00<00:00, 21551.36it/s] 95%|#########5| 10543/11056 [00:00<00:00, 21551.36it/s]100%|##########| 11056/11056 [00:00<00:00, 23857.25it/s]
+[2026-03-09 16:12:03] baseline.retrieval.fit algo=cosine K=60 threads=0 done_in=0.5s | cpu=28% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:03] Stage final.aux_cosine.train done in 0.6s | algo=cosine | cpu=59% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:03] baseline.retrieval.candidates start users=1,742 batch_size=4096 batches=1 | cpu=30% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:03] baseline.retrieval.candidates progress users=1,742/1,742 (100.0%) | cpu=18% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] final.aux_cosine.candidates reuse test_from_val=true | cpu=12% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] Stage final.aux_cosine.candidates done in 0.3s | val_rows=104,520 test_rows=104,520 reused_from_val=True | cpu=10% ram=12% gpu=0% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] baseline.retrieval.setup algo=als users=1,742 items=11,056 interactions=153,639 | cpu=16% ram=12% gpu=0% vram=53% gpu_temp=49C
+  0%|          | 0/3 [00:00<?, ?it/s] 67%|######6   | 2/3 [00:00<00:00, 18.17it/s]100%|##########| 3/3 [00:00<00:00, 18.17it/s]
+[2026-03-09 16:12:04] baseline.retrieval.fit algo=als use_gpu=True done_in=0.2s | cpu=19% ram=12% gpu=76% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] Stage final.aux_als_alt.train done in 0.3s | algo=als | cpu=16% ram=12% gpu=76% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] baseline.retrieval.candidates start users=1,742 batch_size=4096 batches=1 | cpu=11% ram=12% gpu=76% vram=53% gpu_temp=49C
+[2026-03-09 16:12:04] baseline.retrieval.candidates progress users=1,742/1,742 (100.0%) | cpu=21% ram=12% gpu=18% vram=73% gpu_temp=49C
+[2026-03-09 16:12:04] final.aux_als_alt.candidates reuse test_from_val=true | cpu=11% ram=12% gpu=18% vram=73% gpu_temp=49C
+[2026-03-09 16:12:04] Stage final.aux_als_alt.candidates done in 0.2s | val_rows=104,520 test_rows=104,520 reused_from_val=True | cpu=18% ram=12% gpu=18% vram=73% gpu_temp=49C
+[2026-03-09 16:12:04] final.candidate_fusion start sources=4 users_val=1,742 users_test=1,742 k=60 use_gpu=True | cpu=16% ram=12% gpu=18% vram=73% gpu_temp=49C
+[2026-03-09 16:12:04] final.candidate_fusion chunk_users=800 | cpu=20% ram=12% gpu=0% vram=73% gpu_temp=49C
+[2026-03-09 16:12:04] final.candidate_fusion.val chunk_start 1/3 users=800 | cpu=17% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:04] final.candidate_fusion.val.chunk1 backend=cudf | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:04] final.candidate_fusion.val.chunk1 source_prepare name=tt rows=48,000 weight=0.42 | cpu=35% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_ready name=tt rows=48,000 in=0.2s | cpu=16% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_prepare name=als rows=48,000 weight=0.40 | cpu=14% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_ready name=als rows=48,000 in=0.0s | cpu=16% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_prepare name=aux_cosine rows=48,000 weight=0.10 | cpu=18% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_ready name=aux_cosine rows=48,000 in=0.0s | cpu=20% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_prepare name=aux_als_alt rows=48,000 weight=0.08 | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 source_ready name=aux_als_alt rows=48,000 in=0.0s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 merge_start inputs=4 | cpu=15% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 merge_step=1/3 rows=95,728 in=0.0s | cpu=17% ram=12% gpu=1% vram=74% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 merge_step=2/3 rows=122,696 in=0.0s | cpu=18% ram=12% gpu=1% vram=74% gpu_temp=50C
+[2026-03-09 16:12:05] final.candidate_fusion.val.chunk1 merge_step=3/3 rows=138,099 in=0.0s | cpu=12% ram=12% gpu=1% vram=74% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk1 topk_done rows=48,000 k=60 | cpu=15% ram=12% gpu=1% vram=74% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val chunk_done 1/3 rows=48,000 | cpu=12% ram=12% gpu=1% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val chunk_start 2/3 users=800 | cpu=17% ram=12% gpu=1% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 backend=cudf | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_prepare name=tt rows=48,000 weight=0.42 | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_ready name=tt rows=48,000 in=0.0s | cpu=13% ram=12% gpu=0% vram=74% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_prepare name=als rows=48,000 weight=0.40 | cpu=16% ram=12% gpu=1% vram=74% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_ready name=als rows=48,000 in=0.0s | cpu=18% ram=12% gpu=1% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_prepare name=aux_cosine rows=48,000 weight=0.10 | cpu=13% ram=12% gpu=1% vram=73% gpu_temp=51C
+[2026-03-09 16:12:06] final.candidate_fusion.val.chunk2 source_ready name=aux_cosine rows=48,000 in=0.0s | cpu=15% ram=12% gpu=3% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 source_prepare name=aux_als_alt rows=48,000 weight=0.08 | cpu=18% ram=12% gpu=3% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 source_ready name=aux_als_alt rows=48,000 in=0.0s | cpu=15% ram=12% gpu=3% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 merge_start inputs=4 | cpu=11% ram=12% gpu=3% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 merge_step=1/3 rows=95,735 in=0.0s | cpu=18% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 merge_step=2/3 rows=122,713 in=0.0s | cpu=14% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 merge_step=3/3 rows=138,618 in=0.0s | cpu=17% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk2 topk_done rows=48,000 k=60 | cpu=15% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val chunk_done 2/3 rows=48,000 | cpu=15% ram=12% gpu=2% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val chunk_start 3/3 users=142 | cpu=15% ram=12% gpu=2% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 backend=cudf | cpu=14% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 source_prepare name=tt rows=8,520 weight=0.42 | cpu=17% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 source_ready name=tt rows=8,520 in=0.0s | cpu=16% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 source_prepare name=als rows=8,520 weight=0.40 | cpu=15% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 source_ready name=als rows=8,520 in=0.0s | cpu=16% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:07] final.candidate_fusion.val.chunk3 source_prepare name=aux_cosine rows=8,520 weight=0.10 | cpu=13% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 source_ready name=aux_cosine rows=8,520 in=0.0s | cpu=19% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 source_prepare name=aux_als_alt rows=8,520 weight=0.08 | cpu=15% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 source_ready name=aux_als_alt rows=8,520 in=0.0s | cpu=15% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 merge_start inputs=4 | cpu=24% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 merge_step=1/3 rows=17,005 in=0.0s | cpu=14% ram=12% gpu=2% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 merge_step=2/3 rows=21,947 in=0.0s | cpu=17% ram=12% gpu=2% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 merge_step=3/3 rows=24,910 in=0.0s | cpu=14% ram=12% gpu=2% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val.chunk3 topk_done rows=8,520 k=60 | cpu=18% ram=12% gpu=4% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val chunk_done 3/3 rows=8,520 | cpu=14% ram=12% gpu=4% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.val chunk_all_done rows=104,520 | cpu=11% ram=12% gpu=4% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.test chunk_start 1/3 users=800 | cpu=17% ram=12% gpu=1% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.test.chunk1 backend=cudf | cpu=14% ram=12% gpu=1% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.test.chunk1 source_prepare name=tt rows=48,000 weight=0.42 | cpu=17% ram=12% gpu=1% vram=73% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.test.chunk1 source_ready name=tt rows=48,000 in=0.0s | cpu=14% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:08] final.candidate_fusion.test.chunk1 source_prepare name=als rows=48,000 weight=0.40 | cpu=18% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 source_ready name=als rows=48,000 in=0.0s | cpu=15% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 source_prepare name=aux_cosine rows=48,000 weight=0.10 | cpu=13% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 source_ready name=aux_cosine rows=48,000 in=0.0s | cpu=16% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 source_prepare name=aux_als_alt rows=48,000 weight=0.08 | cpu=18% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 source_ready name=aux_als_alt rows=48,000 in=0.0s | cpu=17% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 merge_start inputs=4 | cpu=11% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 merge_step=1/3 rows=95,728 in=0.0s | cpu=15% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 merge_step=2/3 rows=122,696 in=0.0s | cpu=16% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 merge_step=3/3 rows=138,099 in=0.0s | cpu=19% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk1 topk_done rows=48,000 k=60 | cpu=18% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test chunk_done 1/3 rows=48,000 | cpu=18% ram=12% gpu=7% vram=73% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test chunk_start 2/3 users=800 | cpu=13% ram=12% gpu=7% vram=73% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk2 backend=cudf | cpu=13% ram=12% gpu=7% vram=73% gpu_temp=49C
+[2026-03-09 16:12:09] final.candidate_fusion.test.chunk2 source_prepare name=tt rows=48,000 weight=0.42 | cpu=14% ram=12% gpu=7% vram=73% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_ready name=tt rows=48,000 in=0.0s | cpu=17% ram=12% gpu=2% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_prepare name=als rows=48,000 weight=0.40 | cpu=16% ram=12% gpu=2% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_ready name=als rows=48,000 in=0.0s | cpu=16% ram=12% gpu=2% vram=73% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_prepare name=aux_cosine rows=48,000 weight=0.10 | cpu=15% ram=12% gpu=3% vram=73% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_ready name=aux_cosine rows=48,000 in=0.0s | cpu=19% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_prepare name=aux_als_alt rows=48,000 weight=0.08 | cpu=10% ram=12% gpu=3% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 source_ready name=aux_als_alt rows=48,000 in=0.0s | cpu=19% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 merge_start inputs=4 | cpu=13% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 merge_step=1/3 rows=95,735 in=0.0s | cpu=19% ram=12% gpu=5% vram=74% gpu_temp=49C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 merge_step=2/3 rows=122,713 in=0.0s | cpu=14% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 merge_step=3/3 rows=138,618 in=0.0s | cpu=18% ram=12% gpu=2% vram=74% gpu_temp=50C
+[2026-03-09 16:12:10] final.candidate_fusion.test.chunk2 topk_done rows=48,000 k=60 | cpu=22% ram=12% gpu=8% vram=74% gpu_temp=50C
+[2026-03-09 16:12:10] final.candidate_fusion.test chunk_done 2/3 rows=48,000 | cpu=18% ram=12% gpu=8% vram=73% gpu_temp=50C
+[2026-03-09 16:12:10] final.candidate_fusion.test chunk_start 3/3 users=142 | cpu=13% ram=12% gpu=8% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 backend=cudf | cpu=16% ram=12% gpu=8% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_prepare name=tt rows=8,520 weight=0.42 | cpu=15% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_ready name=tt rows=8,520 in=0.0s | cpu=18% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_prepare name=als rows=8,520 weight=0.40 | cpu=18% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_ready name=als rows=8,520 in=0.0s | cpu=19% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_prepare name=aux_cosine rows=8,520 weight=0.10 | cpu=17% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_ready name=aux_cosine rows=8,520 in=0.0s | cpu=18% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_prepare name=aux_als_alt rows=8,520 weight=0.08 | cpu=14% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 source_ready name=aux_als_alt rows=8,520 in=0.0s | cpu=18% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 merge_start inputs=4 | cpu=14% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 merge_step=1/3 rows=17,005 in=0.0s | cpu=18% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 merge_step=2/3 rows=21,947 in=0.0s | cpu=16% ram=12% gpu=4% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 merge_step=3/3 rows=24,910 in=0.0s | cpu=16% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test.chunk3 topk_done rows=8,520 k=60 | cpu=18% ram=12% gpu=1% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test chunk_done 3/3 rows=8,520 | cpu=12% ram=12% gpu=5% vram=73% gpu_temp=50C
+[2026-03-09 16:12:11] final.candidate_fusion.test chunk_all_done rows=104,520 | cpu=5% ram=12% gpu=5% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] Stage final.candidate_fusion done in 7.3s | tt_weight=0.42 als_weight=0.40 aux=aux_cosine:cosine:0.10, aux_als_alt:als:0.08 val_rows=104,520 test_rows=104,520 | cpu=11% ram=12% gpu=5% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] Stage final.retrieval.eval done in 0.1s
+[2026-03-09 16:12:12] ranker.features context_ready backend=pandas genre_vocab=19 user_recent_masks=1,742 | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features start candidate_rows=104,520 train_rows=153,639 target_rows=1,742 | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merges_start backend=pandas rows=104,520 | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=user_cnt rows=104,520 in=0.0s | cpu=20% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=item_cnt rows=104,520 in=0.0s | cpu=11% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=user_mean rows=104,520 in=0.0s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=item_mean rows=104,520 in=0.0s | cpu=20% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=user_last_ts rows=104,520 in=0.0s | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:12] ranker.features merge_done backend=pandas name=user_first_ts rows=104,520 in=0.0s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=item_last_ts rows=104,520 in=0.0s | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=query_ts rows=104,520 in=0.0s | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features base_signals_done | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features genre_signals_done | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features labels_ready rows=1,742 | cpu=12% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features labels_merged rows=104,520 in=0.0s | cpu=13% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features done rows=104,520 feature_cols=26 positive_rate=0.0036 | cpu=25% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features start candidate_rows=104,520 train_rows=153,639 target_rows=1,742 | cpu=18% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merges_start backend=pandas rows=104,520 | cpu=7% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=user_cnt rows=104,520 in=0.0s | cpu=18% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=item_cnt rows=104,520 in=0.0s | cpu=13% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=user_mean rows=104,520 in=0.0s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=item_mean rows=104,520 in=0.0s | cpu=9% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=user_last_ts rows=104,520 in=0.0s | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:13] ranker.features merge_done backend=pandas name=user_first_ts rows=104,520 in=0.0s | cpu=18% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features merge_done backend=pandas name=item_last_ts rows=104,520 in=0.0s | cpu=10% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features merge_done backend=pandas name=query_ts rows=104,520 in=0.0s | cpu=8% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features base_signals_done | cpu=17% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features genre_signals_done | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features labels_ready rows=1,742 | cpu=12% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features labels_merged rows=104,520 in=0.0s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.features done rows=104,520 feature_cols=26 positive_rate=0.0034 | cpu=18% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] Stage final.ranker.features done in 2.2s | train_rows=104,520 test_rows=104,520 | cpu=15% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:14] ranker.train start rows=104,520 cols=26 positive_rate=0.0036 | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:15] ranker.train done framework=xgboost device=cuda in=0.5s | cpu=15% ram=12% gpu=77% vram=73% gpu_temp=50C
+[2026-03-09 16:12:15] ranker.score start rows=104,520 cols=26 | cpu=15% ram=12% gpu=23% vram=73% gpu_temp=50C
+[2026-03-09 16:12:15] ranker.score done rows=104,520 | cpu=9% ram=12% gpu=23% vram=74% gpu_temp=50C
+[2026-03-09 16:12:15] Stage final.ranker.train+score done in 0.8s | scored_rows=104,520 | cpu=10% ram=12% gpu=23% vram=73% gpu_temp=50C
+[2026-03-09 16:12:15] Stage final.ranker.eval done in 0.1s
+[2026-03-09 16:12:15] final.ranker.ensemble start base_rows=104,520 final_rows=104,520 w_base=0.35 w_final=0.65 | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=50C
+[2026-03-09 16:12:15] final.ranker.ensemble normalized base_rows=104,520 final_rows=104,520 | cpu=13% ram=12% gpu=0% vram=73% gpu_temp=51C
+[2026-03-09 16:12:16] final.ranker.ensemble merged rows=152,179 | cpu=16% ram=12% gpu=0% vram=73% gpu_temp=51C
+[2026-03-09 16:12:16] final.ranker.ensemble done rows=152,179 | cpu=17% ram=12% gpu=0% vram=73% gpu_temp=51C
+[2026-03-09 16:12:16] Stage final.ranker.ensemble done in 0.4s | baseline_weight=0.35 final_weight=0.65
+[2026-03-09 16:12:16] Saved: outputs/smoke_hybrid4/tables/metrics_final.csv
+[2026-03-09 16:12:16] Saved: outputs/smoke_hybrid4/tables/metrics_comparison.csv
+[2026-03-09 16:12:17] Stage plot.save done in 0.7s
+[2026-03-09 16:12:17] Saved: outputs/smoke_hybrid4/tables/split_stats.csv
+[2026-03-09 16:12:17] Pipeline done in 36.7s | cpu=14% ram=12% gpu=0% vram=73% gpu_temp=51C
+saved=outputs/smoke_hybrid4/tables/metrics_comparison.csv
+                                  model  k   recall  hitrate     ndcg      map      mrr  users
+                 baseline_retrieval_als 10 0.072905 0.072905 0.035838 0.024779 0.024779   1742
+                 baseline_retrieval_als 20 0.124569 0.124569 0.048841 0.028315 0.028315   1742
+                        baseline_ranker 10 0.072905 0.072905 0.036702 0.025713 0.025713   1742
+                        baseline_ranker 20 0.128588 0.128588 0.050746 0.029550 0.029550   1742
+final_retrieval_two_tower_faiss_hybrid4 10 0.057405 0.057405 0.026132 0.016860 0.016860   1742
+final_retrieval_two_tower_faiss_hybrid4 20 0.092997 0.092997 0.035157 0.019350 0.019350   1742
+         final_ranker_two_tower_hybrid4 10 0.080941 0.080941 0.039074 0.026369 0.026369   1742
+         final_ranker_two_tower_hybrid4 20 0.140643 0.140643 0.054064 0.030429 0.030429   1742
+                  final_ranker_ensemble 10 0.086682 0.086682 0.041025 0.027304 0.027304   1742
+                  final_ranker_ensemble 20 0.145235 0.145235 0.055756 0.031309 0.031309   1742

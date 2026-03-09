@@ -1,0 +1,4 @@
+log_file=outputs/fullrun_gpu_speed150_quality_k58_q12k_r170/logs/pipeline.log
+[2026-03-09 08:47:27] Pipeline start | cpu=0% ram=8% gpu=20% vram=7% gpu_temp=55C
+[2026-03-09 08:47:27] Outputs: tables=outputs/fullrun_gpu_speed150_quality_k58_q12k_r170/tables figures=outputs/fullrun_gpu_speed150_quality_k58_q12k_r170/figures
+[2026-03-09 08:47:44] Stage data.load done in 16.5s | rows=15,630,129 users=162,414 items=47,396 | cpu=12% ram=9% gpu=25% vram=7% gpu_temp=54C
